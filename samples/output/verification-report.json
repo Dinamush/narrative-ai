@@ -1,0 +1,426 @@
+[
+  {
+    "sample": "the-last-light",
+    "title": "The Last Light",
+    "summary": {
+      "extractionMode": "heuristic",
+      "scenes": 7,
+      "events": 18,
+      "fabulaEdges": 17,
+      "propositions": 9,
+      "referenceLinks": 18,
+      "styleTimeline": 7,
+      "themes": [
+        "betrayal",
+        "power",
+        "family",
+        "death",
+        "war"
+      ],
+      "issueTypes": [],
+      "issueCount": 0,
+      "characters": [
+        {
+          "name": "Elena",
+          "role": "protagonist",
+          "snapshots": 7,
+          "arcShape": "fall",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Marcus",
+          "role": "deuteragonist",
+          "snapshots": 5,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Thomas",
+          "role": "antagonist",
+          "snapshots": 2,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Greyrock Point",
+          "role": "supporting",
+          "snapshots": 2,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "People",
+          "role": "supporting",
+          "snapshots": 3,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        }
+      ],
+      "characterEdges": 9,
+      "characterInsights": 5,
+      "dramaticModel": "freytag",
+      "tensionPoints": 7,
+      "climaxSceneId": "scene-3",
+      "peakTension": 0.6090421455938698,
+      "turningPoints": 1,
+      "wavelengthFlags": 0
+    },
+    "checks": [
+      {
+        "name": "segmentation_scenes",
+        "pass": true,
+        "detail": "7 scenes (expected ≥3)"
+      },
+      {
+        "name": "segmentation_chapters",
+        "pass": true,
+        "detail": "4 chapters (expected ≥2)"
+      },
+      {
+        "name": "fabula_events",
+        "pass": true,
+        "detail": "18 events (expected ≥3)"
+      },
+      {
+        "name": "fabula_edges",
+        "pass": true,
+        "detail": "17 causal edges (expected ≥2)"
+      },
+      {
+        "name": "syuzhet_references",
+        "pass": true,
+        "detail": "18 reference links for 7 scenes"
+      },
+      {
+        "name": "style_timeline",
+        "pass": true,
+        "detail": "style timeline 7 vs scenes 7"
+      },
+      {
+        "name": "tension_series",
+        "pass": true,
+        "detail": "7 tension points"
+      },
+      {
+        "name": "themes_detected",
+        "pass": true,
+        "detail": "themes: betrayal, power, family, death, war, loss, love, justice"
+      },
+      {
+        "name": "characters_identified",
+        "pass": true,
+        "detail": "5 characters: Elena, Marcus, Thomas, Greyrock Point, People"
+      },
+      {
+        "name": "character_snapshots",
+        "pass": true,
+        "detail": "max snapshots: 7"
+      },
+      {
+        "name": "character_relationships",
+        "pass": true,
+        "detail": "9 relationship edges"
+      },
+      {
+        "name": "character_insights",
+        "pass": true,
+        "detail": "5 insights"
+      },
+      {
+        "name": "arc_metrics",
+        "pass": true,
+        "detail": "arc shapes: fall, flat, flat, flat, flat"
+      },
+      {
+        "name": "propositions",
+        "pass": true,
+        "detail": "9 propositions"
+      },
+      {
+        "name": "no_dag_cycles",
+        "pass": true,
+        "detail": "plot issues: 0 ()"
+      },
+      {
+        "name": "expected_protagonist_elena",
+        "pass": true,
+        "detail": "found names: elena, marcus, thomas, greyrock point, people"
+      },
+      {
+        "name": "expected_cast_marcus_or_thomas",
+        "pass": true,
+        "detail": "found names: elena, marcus, thomas, greyrock point, people"
+      },
+      {
+        "name": "betrayal_or_love_theme",
+        "pass": true,
+        "detail": "themes: betrayal, power, family, death, war, loss, love, justice"
+      },
+      {
+        "name": "extraction_mode",
+        "pass": true,
+        "detail": "mode: heuristic"
+      }
+    ],
+    "modelChecks": [
+      {
+        "model": "freytag",
+        "pass": true,
+        "detail": "targets vary (7 unique), climax at 50%",
+        "issueCount": 2
+      },
+      {
+        "model": "three_act",
+        "pass": true,
+        "detail": "targets vary (7 unique), climax at 50%",
+        "issueCount": 2
+      },
+      {
+        "model": "fichtean",
+        "pass": true,
+        "detail": "targets vary (7 unique), climax at 50%",
+        "issueCount": 1
+      }
+    ],
+    "phases": [
+      {
+        "phase": "ingestion",
+        "progress": 5,
+        "message": "Segmenting manuscript…"
+      },
+      {
+        "phase": "fabula",
+        "progress": 15,
+        "message": "Extracting events per scene…"
+      },
+      {
+        "phase": "syuzhet",
+        "progress": 70,
+        "message": "Projecting syuzhet references…"
+      },
+      {
+        "phase": "style",
+        "progress": 72,
+        "message": "Analyzing register, tension, themes…"
+      },
+      {
+        "phase": "character_states",
+        "progress": 76,
+        "message": "Identifying characters and extracting state snapshots…"
+      },
+      {
+        "phase": "egoquest",
+        "progress": 82,
+        "message": "Scoring EgoQuest psychodynamic signals…"
+      },
+      {
+        "phase": "arc_aggregation",
+        "progress": 88,
+        "message": "Aggregating character arcs and relationships…"
+      },
+      {
+        "phase": "validation",
+        "progress": 90,
+        "message": "Extracting propositions…"
+      }
+    ],
+    "passed": true,
+    "modelsPassed": true
+  },
+  {
+    "sample": "ward-rounds",
+    "title": "Ward Rounds",
+    "summary": {
+      "extractionMode": "heuristic",
+      "scenes": 3,
+      "events": 8,
+      "fabulaEdges": 7,
+      "propositions": 3,
+      "referenceLinks": 8,
+      "styleTimeline": 3,
+      "themes": [
+        "war",
+        "betrayal",
+        "power",
+        "freedom"
+      ],
+      "issueTypes": [],
+      "issueCount": 0,
+      "characters": [
+        {
+          "name": "Amara",
+          "role": "protagonist",
+          "snapshots": 3,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Cole",
+          "role": "deuteragonist",
+          "snapshots": 2,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        }
+      ],
+      "characterEdges": 1,
+      "characterInsights": 2,
+      "dramaticModel": "freytag",
+      "tensionPoints": 3,
+      "climaxSceneId": "scene-0",
+      "peakTension": 0.5880701754385965,
+      "turningPoints": 0,
+      "wavelengthFlags": 0
+    },
+    "checks": [
+      {
+        "name": "segmentation_scenes",
+        "pass": true,
+        "detail": "3 scenes (expected ≥3)"
+      },
+      {
+        "name": "segmentation_chapters",
+        "pass": true,
+        "detail": "3 chapters (expected ≥2)"
+      },
+      {
+        "name": "fabula_events",
+        "pass": true,
+        "detail": "8 events (expected ≥3)"
+      },
+      {
+        "name": "fabula_edges",
+        "pass": true,
+        "detail": "7 causal edges (expected ≥2)"
+      },
+      {
+        "name": "syuzhet_references",
+        "pass": true,
+        "detail": "8 reference links for 3 scenes"
+      },
+      {
+        "name": "style_timeline",
+        "pass": true,
+        "detail": "style timeline 3 vs scenes 3"
+      },
+      {
+        "name": "tension_series",
+        "pass": true,
+        "detail": "3 tension points"
+      },
+      {
+        "name": "themes_detected",
+        "pass": true,
+        "detail": "themes: war, betrayal, power, freedom"
+      },
+      {
+        "name": "characters_identified",
+        "pass": true,
+        "detail": "2 characters: Amara, Cole"
+      },
+      {
+        "name": "character_snapshots",
+        "pass": true,
+        "detail": "max snapshots: 3"
+      },
+      {
+        "name": "character_relationships",
+        "pass": true,
+        "detail": "1 relationship edges"
+      },
+      {
+        "name": "character_insights",
+        "pass": true,
+        "detail": "2 insights"
+      },
+      {
+        "name": "arc_metrics",
+        "pass": true,
+        "detail": "arc shapes: flat, flat"
+      },
+      {
+        "name": "propositions",
+        "pass": true,
+        "detail": "3 propositions"
+      },
+      {
+        "name": "no_dag_cycles",
+        "pass": true,
+        "detail": "plot issues: 0 ()"
+      },
+      {
+        "name": "expected_amara",
+        "pass": true,
+        "detail": "found names: amara, cole"
+      },
+      {
+        "name": "extraction_mode",
+        "pass": true,
+        "detail": "mode: heuristic"
+      }
+    ],
+    "modelChecks": [
+      {
+        "model": "freytag",
+        "pass": true,
+        "detail": "targets vary (3 unique), climax at 0%",
+        "issueCount": 2
+      },
+      {
+        "model": "three_act",
+        "pass": true,
+        "detail": "targets vary (3 unique), climax at 0%",
+        "issueCount": 2
+      },
+      {
+        "model": "fichtean",
+        "pass": true,
+        "detail": "targets vary (3 unique), climax at 0%",
+        "issueCount": 2
+      }
+    ],
+    "phases": [
+      {
+        "phase": "ingestion",
+        "progress": 5,
+        "message": "Segmenting manuscript…"
+      },
+      {
+        "phase": "fabula",
+        "progress": 15,
+        "message": "Extracting events per scene…"
+      },
+      {
+        "phase": "syuzhet",
+        "progress": 70,
+        "message": "Projecting syuzhet references…"
+      },
+      {
+        "phase": "style",
+        "progress": 72,
+        "message": "Analyzing register, tension, themes…"
+      },
+      {
+        "phase": "character_states",
+        "progress": 76,
+        "message": "Identifying characters and extracting state snapshots…"
+      },
+      {
+        "phase": "egoquest",
+        "progress": 82,
+        "message": "Scoring EgoQuest psychodynamic signals…"
+      },
+      {
+        "phase": "arc_aggregation",
+        "progress": 88,
+        "message": "Aggregating character arcs and relationships…"
+      },
+      {
+        "phase": "validation",
+        "progress": 90,
+        "message": "Extracting propositions…"
+      }
+    ],
+    "passed": true,
+    "modelsPassed": true
+  }
+]

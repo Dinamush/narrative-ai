@@ -1,0 +1,25 @@
+{
+  "name": "narrative-ai",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build --workspace=@narrative-ai/graph-schema --workspace=@narrative-ai/egoquest-fiction --workspace=@narrative-ai/narrative-engine && npm run dev --workspace=web",
+    "build": "npm run build --workspace=@narrative-ai/graph-schema && npm run build --workspace=@narrative-ai/egoquest-fiction && npm run build --workspace=@narrative-ai/narrative-engine && npm run build --workspace=web",
+    "lint": "npm run lint --workspace=web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "rag:ingest": "node backend/scripts/rag-ingest.mjs",
+    "analyze:sample": "npm run build --workspace=@narrative-ai/graph-schema --workspace=@narrative-ai/egoquest-fiction --workspace=@narrative-ai/narrative-engine && node backend/scripts/run-sample-analysis.mjs",
+    "test:ollama": "npm run build --workspace=@narrative-ai/narrative-engine && node backend/scripts/test-ollama.mjs",
+    "test:e2e": "node backend/scripts/e2e-web-api.mjs"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
