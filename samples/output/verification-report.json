@@ -3,12 +3,12 @@
     "sample": "the-last-light",
     "title": "The Last Light",
     "summary": {
-      "extractionMode": "heuristic",
+      "extractionMode": "ollama",
       "scenes": 7,
-      "events": 18,
-      "fabulaEdges": 17,
+      "events": 39,
+      "fabulaEdges": 38,
       "propositions": 9,
-      "referenceLinks": 18,
+      "referenceLinks": 39,
       "styleTimeline": 7,
       "themes": [
         "betrayal",
@@ -22,30 +22,50 @@
       "characters": [
         {
           "name": "Elena",
-          "role": "protagonist",
+          "role": "supporting",
           "snapshots": 7,
           "arcShape": "fall",
           "hasEgoQuest": false
         },
         {
           "name": "Marcus",
-          "role": "deuteragonist",
+          "role": "supporting",
           "snapshots": 5,
           "arcShape": "flat",
           "hasEgoQuest": false
         },
         {
           "name": "Thomas",
-          "role": "antagonist",
+          "role": "supporting",
           "snapshots": 2,
           "arcShape": "flat",
           "hasEgoQuest": false
         },
         {
-          "name": "Greyrock Point",
-          "role": "supporting",
-          "snapshots": 2,
+          "name": "Ant",
+          "role": "protagonist",
+          "snapshots": 1,
           "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Marcus Hale",
+          "role": "supporting",
+          "snapshots": 1,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Council",
+          "role": "supporting",
+          "snapshots": 4,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Uncle",
+          "role": "antagonist",
+          "snapshots": 0,
           "hasEgoQuest": false
         },
         {
@@ -54,10 +74,38 @@
           "snapshots": 3,
           "arcShape": "flat",
           "hasEgoQuest": false
+        },
+        {
+          "name": "Elena Voss",
+          "role": "supporting",
+          "snapshots": 2,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Storm",
+          "role": "supporting",
+          "snapshots": 3,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Supply Boat",
+          "role": "supporting",
+          "snapshots": 1,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Family",
+          "role": "supporting",
+          "snapshots": 1,
+          "arcShape": "flat",
+          "hasEgoQuest": false
         }
       ],
-      "characterEdges": 9,
-      "characterInsights": 5,
+      "characterEdges": 38,
+      "characterInsights": 11,
       "dramaticModel": "freytag",
       "tensionPoints": 7,
       "climaxSceneId": "scene-3",
@@ -79,17 +127,17 @@
       {
         "name": "fabula_events",
         "pass": true,
-        "detail": "18 events (expected ≥3)"
+        "detail": "39 events (expected ≥3)"
       },
       {
         "name": "fabula_edges",
         "pass": true,
-        "detail": "17 causal edges (expected ≥2)"
+        "detail": "38 causal edges (expected ≥2)"
       },
       {
         "name": "syuzhet_references",
         "pass": true,
-        "detail": "18 reference links for 7 scenes"
+        "detail": "39 reference links for 7 scenes"
       },
       {
         "name": "style_timeline",
@@ -109,7 +157,7 @@
       {
         "name": "characters_identified",
         "pass": true,
-        "detail": "5 characters: Elena, Marcus, Thomas, Greyrock Point, People"
+        "detail": "12 characters: Elena, Marcus, Thomas, Ant, Marcus Hale, Council, Uncle, People, Elena Voss, Storm, Supply Boat, Family"
       },
       {
         "name": "character_snapshots",
@@ -119,17 +167,17 @@
       {
         "name": "character_relationships",
         "pass": true,
-        "detail": "9 relationship edges"
+        "detail": "38 relationship edges"
       },
       {
         "name": "character_insights",
         "pass": true,
-        "detail": "5 insights"
+        "detail": "11 insights"
       },
       {
         "name": "arc_metrics",
         "pass": true,
-        "detail": "arc shapes: fall, flat, flat, flat, flat"
+        "detail": "arc shapes: fall, flat, flat, flat, flat, flat, —, flat, flat, flat, flat, flat"
       },
       {
         "name": "propositions",
@@ -144,12 +192,12 @@
       {
         "name": "expected_protagonist_elena",
         "pass": true,
-        "detail": "found names: elena, marcus, thomas, greyrock point, people"
+        "detail": "found names: elena, marcus, thomas, ant, marcus hale, council, uncle, people, elena voss, storm, supply boat, family"
       },
       {
         "name": "expected_cast_marcus_or_thomas",
         "pass": true,
-        "detail": "found names: elena, marcus, thomas, greyrock point, people"
+        "detail": "found names: elena, marcus, thomas, ant, marcus hale, council, uncle, people, elena voss, storm, supply boat, family"
       },
       {
         "name": "betrayal_or_love_theme",
@@ -159,7 +207,7 @@
       {
         "name": "extraction_mode",
         "pass": true,
-        "detail": "mode: heuristic"
+        "detail": "mode: ollama"
       }
     ],
     "modelChecks": [
@@ -231,12 +279,12 @@
     "sample": "ward-rounds",
     "title": "Ward Rounds",
     "summary": {
-      "extractionMode": "heuristic",
+      "extractionMode": "ollama",
       "scenes": 3,
-      "events": 8,
-      "fabulaEdges": 7,
+      "events": 7,
+      "fabulaEdges": 6,
       "propositions": 3,
-      "referenceLinks": 8,
+      "referenceLinks": 7,
       "styleTimeline": 3,
       "themes": [
         "war",
@@ -249,21 +297,54 @@
       "characters": [
         {
           "name": "Amara",
-          "role": "protagonist",
+          "role": "supporting",
           "snapshots": 3,
           "arcShape": "flat",
           "hasEgoQuest": false
         },
         {
           "name": "Cole",
-          "role": "deuteragonist",
+          "role": "supporting",
           "snapshots": 2,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Child",
+          "role": "supporting",
+          "snapshots": 1,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Nurse Cole",
+          "role": "supporting",
+          "snapshots": 1,
+          "arcShape": "flat",
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Ant",
+          "role": "protagonist",
+          "snapshots": 0,
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Uncle",
+          "role": "antagonist",
+          "snapshots": 0,
+          "hasEgoQuest": false
+        },
+        {
+          "name": "Director",
+          "role": "supporting",
+          "snapshots": 1,
           "arcShape": "flat",
           "hasEgoQuest": false
         }
       ],
-      "characterEdges": 1,
-      "characterInsights": 2,
+      "characterEdges": 8,
+      "characterInsights": 5,
       "dramaticModel": "freytag",
       "tensionPoints": 3,
       "climaxSceneId": "scene-0",
@@ -285,17 +366,17 @@
       {
         "name": "fabula_events",
         "pass": true,
-        "detail": "8 events (expected ≥3)"
+        "detail": "7 events (expected ≥3)"
       },
       {
         "name": "fabula_edges",
         "pass": true,
-        "detail": "7 causal edges (expected ≥2)"
+        "detail": "6 causal edges (expected ≥2)"
       },
       {
         "name": "syuzhet_references",
         "pass": true,
-        "detail": "8 reference links for 3 scenes"
+        "detail": "7 reference links for 3 scenes"
       },
       {
         "name": "style_timeline",
@@ -315,7 +396,7 @@
       {
         "name": "characters_identified",
         "pass": true,
-        "detail": "2 characters: Amara, Cole"
+        "detail": "7 characters: Amara, Cole, Child, Nurse Cole, Ant, Uncle, Director"
       },
       {
         "name": "character_snapshots",
@@ -325,17 +406,17 @@
       {
         "name": "character_relationships",
         "pass": true,
-        "detail": "1 relationship edges"
+        "detail": "8 relationship edges"
       },
       {
         "name": "character_insights",
         "pass": true,
-        "detail": "2 insights"
+        "detail": "5 insights"
       },
       {
         "name": "arc_metrics",
         "pass": true,
-        "detail": "arc shapes: flat, flat"
+        "detail": "arc shapes: flat, flat, flat, flat, —, —, flat"
       },
       {
         "name": "propositions",
@@ -350,12 +431,12 @@
       {
         "name": "expected_amara",
         "pass": true,
-        "detail": "found names: amara, cole"
+        "detail": "found names: amara, cole, child, nurse cole, ant, uncle, director"
       },
       {
         "name": "extraction_mode",
         "pass": true,
-        "detail": "mode: heuristic"
+        "detail": "mode: ollama"
       }
     ],
     "modelChecks": [

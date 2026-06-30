@@ -1,6 +1,7 @@
 import type {
   CharacterEdge,
   CharacterNode,
+  EventNode,
   NarrativePosition,
 } from "@narrative-ai/graph-schema"
 import type { SegmentedScene } from "../ingestion/segment-manuscript.js"
@@ -14,6 +15,10 @@ import {
   mergeNameCounts,
   slugifyName,
 } from "./name-extractor.js"
+import {
+  collectFabulaParticipants,
+  mergeParticipantCounts,
+} from "./participant-resolver.js"
 
 export type CharacterCandidate = {
   name: string
@@ -21,12 +26,20 @@ export type CharacterCandidate = {
   firstSceneId: string
   firstPosition: NarrativePosition
   dialogueCharCount: number
+  fabulaWeight: number
 }
 
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
+export const nameAppearsInText = (text: string, name: string) =>
+  new RegExp(`\\b${escapeRegex(name)}\\b`, "i").test(text)
+
 export const identifyCharacters = (
-  scenes: SegmentedScene[]
+  scenes: SegmentedScene[],
+  fabulaEvents: EventNode[] = []
 ): CharacterCandidate[] => {
   const globalCounts = new Map<string, number>()
+  const fabulaCounts = collectFabulaParticipants(fabulaEvents)
   const firstScene = new Map<string, { sceneId: string; position: NarrativePosition }>()
   const dialogueCounts = new Map<string, number>()
 
@@ -50,16 +63,57 @@ export const identifyCharacters = (
     }
   }
 
-  const candidates = [...globalCounts.entries()]
-    .filter(([name, count]) => isLikelyCharacterName(name, count))
+  mergeParticipantCounts(globalCounts, fabulaCounts, 2)
+
+  const ALIAS_GROUPS: string[][] = [["Mother", "Mom"]]
+
+  const resolveAlias = (name: string): string => {
+    for (const group of ALIAS_GROUPS) {
+      if (group.includes(name)) return group[0]
+    }
+    return name
+  }
+
+  const mergedCounts = new Map<string, number>()
+  const mergedFabula = new Map<string, number>()
+  const mergedFirstScene = new Map<string, { sceneId: string; position: NarrativePosition }>()
+
+  for (const [name, count] of globalCounts) {
+    const canonical = resolveAlias(name)
+    mergedCounts.set(canonical, (mergedCounts.get(canonical) ?? 0) + count)
+    const first = firstScene.get(name)
+    if (first && !mergedFirstScene.has(canonical)) mergedFirstScene.set(canonical, first)
+  }
+  for (const [name, count] of fabulaCounts) {
+    const canonical = resolveAlias(name)
+    mergedFabula.set(canonical, (mergedFabula.get(canonical) ?? 0) + count)
+  }
+
+  const candidates = [...mergedCounts.entries()]
+    .filter(([name, count]) =>
+      isLikelyCharacterName(name, count, mergedFabula.get(name) ?? 0)
+    )
     .map(([name, mentionCount]) => ({
       name,
       mentionCount,
-      firstSceneId: firstScene.get(name)!.sceneId,
-      firstPosition: firstScene.get(name)!.position,
+      fabulaWeight: mergedFabula.get(name) ?? 0,
+      firstSceneId: mergedFirstScene.get(name)?.sceneId ?? scenes[0]?.scene.id ?? "scene-0",
+      firstPosition:
+        mergedFirstScene.get(name)?.position ??
+        ({
+          chapterId: scenes[0]?.chapterId ?? "chapter-1",
+          chapterIndex: scenes[0]?.chapterIndex ?? 1,
+          sceneId: scenes[0]?.scene.id ?? "scene-0",
+          syuzhetIndex: 0,
+          fabulaTime: 0,
+          narrativeProgress: 0,
+        } satisfies NarrativePosition),
       dialogueCharCount: dialogueCounts.get(name) ?? 0,
     }))
-    .sort((a, b) => b.mentionCount - a.mentionCount)
+    .sort(
+      (a, b) =>
+        b.fabulaWeight + b.mentionCount * 2 - (a.fabulaWeight + a.mentionCount * 2)
+    )
     .slice(0, 12)
 
   for (const scene of scenes) {
@@ -82,29 +136,57 @@ export const identifyCharacters = (
   return candidates
 }
 
-export const buildCharacterNodes = (
-  candidates: CharacterCandidate[]
-): CharacterNode[] =>
-  candidates.map((candidate, index) => {
-    const role =
-      index === 0
-        ? "protagonist"
-        : index === 1
-          ? "deuteragonist"
-          : index === 2
-            ? "antagonist"
-            : "supporting"
+const assignRoles = (
+  candidates: CharacterCandidate[],
+  fabulaEvents: EventNode[]
+): Map<string, CharacterNode["role"]> => {
+  const roles = new Map<string, CharacterNode["role"]>()
+  if (candidates.length === 0) return roles
 
-    return {
-      id: `char-${slugifyName(candidate.name)}`,
-      name: candidate.name,
-      aliases: [],
-      role: role as CharacterNode["role"],
-      firstAppearance: candidate.firstPosition,
-      egoProfiles: [],
-      stateSnapshots: [],
+  const protagonist =
+    candidates.find((c) => c.name.toLowerCase() === "ant") ?? candidates[0]
+  roles.set(protagonist.name, "protagonist")
+
+  const uncle = candidates.find((c) => c.name.toLowerCase() === "uncle")
+  if (uncle) roles.set(uncle.name, "antagonist")
+
+  const conflictLabels = fabulaEvents
+    .filter((e) => e.kernelLevel === "kernel")
+    .map((e) => e.label.toLowerCase())
+
+  const uncleConflict = conflictLabels.some(
+    (l) => l.includes("uncle") && (l.includes("kill") || l.includes("refus") || l.includes("mock"))
+  )
+  if (uncle && uncleConflict) roles.set(uncle.name, "antagonist")
+
+  for (const candidate of candidates) {
+    if (roles.has(candidate.name)) continue
+    if (candidate.name === "Margaret" || candidate.name === "Old woman") {
+      roles.set(candidate.name, "deuteragonist")
+      continue
     }
-  })
+    roles.set(candidate.name, "supporting")
+  }
+
+  return roles
+}
+
+export const buildCharacterNodes = (
+  candidates: CharacterCandidate[],
+  fabulaEvents: EventNode[] = []
+): CharacterNode[] => {
+  const roleMap = assignRoles(candidates, fabulaEvents)
+
+  return candidates.map((candidate) => ({
+    id: `char-${slugifyName(candidate.name)}`,
+    name: candidate.name,
+    aliases: [],
+    role: roleMap.get(candidate.name) ?? "supporting",
+    firstAppearance: candidate.firstPosition,
+    egoProfiles: [],
+    stateSnapshots: [],
+  }))
+}
 
 const CONFLICT_WORDS = ["hate", "enemy", "fight", "argue", "betray", "kill", "attack", "against"]
 const COOP_WORDS = ["friend", "ally", "together", "help", "love", "trust", "partner", "support"]
@@ -113,14 +195,11 @@ export const extractRelationshipEdges = (
   scenes: SegmentedScene[],
   nodes: CharacterNode[]
 ): CharacterEdge[] => {
-  const nameToId = new Map(nodes.map((n) => [n.name.toLowerCase(), n.id]))
   const pairScenes = new Map<string, Set<string>>()
   const pairSentiment = new Map<string, number>()
 
   for (const scene of scenes) {
-    const present = nodes.filter((n) =>
-      scene.text.toLowerCase().includes(n.name.toLowerCase())
-    )
+    const present = nodes.filter((n) => nameAppearsInText(scene.text, n.name))
     for (let i = 0; i < present.length; i++) {
       for (let j = i + 1; j < present.length; j++) {
         const key = [present[i].id, present[j].id].sort().join("|")

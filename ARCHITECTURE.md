@@ -658,15 +658,51 @@ Pipeline runs as a **sequential DAG of jobs** with progress streaming to the cli
 | Step | Implementation |
 |------|----------------|
 | Format parsing | `.txt`, `.md`, `.docx`, Fountain screenplay |
-| Segmentation | Chapter headers, `***`, scene breaks, blank-line heuristics |
+| Segmentation | Chapter headers, `***`, `---` / `--` scene breaks, time-jump openers, stage directions, oversized-scene rebalance (~900 words) |
 | Word count + metadata | Auto-detect POV hints from pronoun ratios |
+
+#### 5.0.1 Literary scene segmentation (theory)
+
+Segmentation follows **narratological scene** boundaries rather than arbitrary token windows.
+
+| Signal | Theory | Implementation |
+|--------|--------|----------------|
+| **Strong break** | *Syuzhet* discontinuity (Genette, *Narrative Discourse*) — reader perceives a new presentational unit | `***`, `---`, `###` on their own line |
+| **Weak break** | Beat / ellipsis within chapter fiction (Bal, *Narratology*) | `--` on its own line → `discourseOps: ["ellipsis"]` on child scene |
+| **Time jump** | Fabula-time shift without explicit marker (Chatman, *Story and Discourse*) | Openers: *Some time later*, *Days passed*, *That evening*, *Blackness hung* |
+| **Stage direction** | Dramatic interlude / chorus (screenplay convention) | `CHORUS:`, `SCENE N:`, `(fade`, `INT.` / `EXT.` |
+| **Oversized scene** | LLM context + event-density limits | Split at weak breaks or paragraph boundaries when \> 900 words |
+
+**Rationale:** A single 3,000-word chapter with internal `--` beats is one *chapter* but multiple *scenes* for fabula extraction. Missing weak breaks caused under-segmentation (e.g. Red Ants: 4 scenes → 10).
 
 ### Phase 1 — Fabula construction
 
-1. **Event extraction** — LLM with structured JSON schema per scene; require `evidenceSpan`
+1. **Event extraction** — LLM with structured JSON schema per scene; **dynamic event cap** `min(24, max(6, 6 + ⌈words/100⌉))`; prompt window scales `4k–12k` chars; Creole-aware participant hints
 2. **Causal linking** — Pairwise or chain prompting; typed edges
 3. **DAG enforcement** — Tarjan cycle detection; cycles → discourse annotation or issue flag
 4. **Kernel/satellite** — Chatman classification: removable without breaking plot?
+
+#### 5.1.1 Fabula participant fusion (character ID)
+
+Character identity combines **surface mentions** (regex + role descriptors) with **fabula participants** (LLM-extracted agents/patients):
+
+```
+Scene text ──► name-extractor (Capitalized tokens + role phrases)
+                    │
+Fabula events ──► participant-resolver (normalize "old woman" → Old woman)
+                    │
+                    └──► merge counts (fabula weight ×2) ──► isLikelyCharacterName
+```
+
+| Problem | Fix |
+|---------|-----|
+| Creole sentence-initial tokens (`Yuh`, `But`, `Kill`) | `NAME_STOP_WORDS` + verb filter |
+| Role-only references (`the old woman`, `his cousin`) | `ROLE_DESCRIPTOR` regex → canonical labels |
+| Fabula says "Uncle" but text says "larger man" | `participant-resolver` pattern table |
+| Rank-based protagonist = most mentions | Explicit role rules: Ant → protagonist, Uncle → antagonist |
+| EgoQuest empty attributed text | Word-boundary scene presence + dialogue attributor pronoun tags |
+
+Dialect benchmark: *Red Ants (Creole)* — target cast Ant, Uncle, Margaret, Old woman, Cousin, John, Police; exclude function-word false positives.
 
 ### Phase 2 — Syuzhet projection
 
@@ -689,7 +725,7 @@ See [Section 6](#6-egoquest-fiction-integration) and [Section 16](#16-character-
 
 | Step | Implementation |
 |------|----------------|
-| Identity | BookNLP or LLM coref → `CharacterNode` + alias registry |
+| Identity | Heuristic name extraction + fabula participant fusion + dialogue attribution (BookNLP / LLM coref planned) → `CharacterNode` + alias registry |
 | Attribution | Dialogue, internal monologue, FID spans per character per scene |
 | Mental state | EvolvTrip triples + CHIRON statements per major character per scene |
 | Physical/knowledge | OpenPI-style `(entity, attr, before, after)` deltas |

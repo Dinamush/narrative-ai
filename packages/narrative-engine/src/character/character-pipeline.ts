@@ -23,6 +23,7 @@ import {
   buildCharacterNodes,
   extractRelationshipEdges,
   identifyCharacters,
+  nameAppearsInText,
 } from "./character-identifier.js"
 import {
   collectEvidenceSpans,
@@ -44,8 +45,7 @@ const buildSnapshot = (
   )
   const attributed = collectAttributedText(spans, character.name)
   const appearsInScene =
-    scene.text.toLowerCase().includes(character.name.toLowerCase()) ||
-    attributed.length > 0
+    nameAppearsInText(scene.text, character.name) || attributed.length > 0
 
   if (!appearsInScene) return null
 
@@ -57,10 +57,18 @@ const buildSnapshot = (
     scene.scene.textSpanRef.start
   )
 
-  const sentiment = scoreSentiment(attributed.length >= 20 ? attributed : scene.text)
+  const voiceText =
+    attributed.length >= 20
+      ? attributed
+      : collectAttributedText(
+          attributeSceneText(scene.text, scene.scene.textSpanRef.start, allNames),
+          character.name
+        )
+
+  const sentiment = scoreSentiment(voiceText.length >= 20 ? voiceText : scene.text)
   const tension = sentimentToTension(sentiment)
-  const egoSignals = scoreEgoQuestFromText(attributed.length >= 20 ? attributed : "")
-  const egoProfile = buildFictionEgoProfile(egoSignals, attributed.length)
+  const egoSignals = scoreEgoQuestFromText(voiceText.length >= 40 ? voiceText : "")
+  const egoProfile = buildFictionEgoProfile(egoSignals, voiceText.length)
 
   const confidence = Math.min(
     1,
@@ -119,8 +127,8 @@ export const runCharacterPipeline = (
   scenes: SegmentedScene[]
 ): CharacterPipelineResult => {
   snapshotCounter = 0
-  const candidates = identifyCharacters(scenes)
-  let nodes = buildCharacterNodes(candidates)
+  const candidates = identifyCharacters(scenes, work.graph.fabula.nodes)
+  let nodes = buildCharacterNodes(candidates, work.graph.fabula.nodes)
   const allNames = nodes.map((n) => n.name)
 
   nodes = nodes.map((node) => {
