@@ -1,17 +1,26 @@
 import Link from "next/link"
 import { BookOpen, GitBranch, Sparkles } from "lucide-react"
+import { APP_VERSION } from "@/lib/app-meta"
 
 export const TopBar = () => (
   <header className="fixed top-4 left-4 right-4 z-50 mx-auto max-w-7xl rounded-xl border border-border bg-elevated/90 px-4 py-3 backdrop-blur-sm">
     <div className="flex items-center justify-between gap-4">
-      <Link
-        href="/"
-        className="flex items-center gap-2 font-[family-name:var(--font-fraunces)] text-lg font-semibold text-foreground transition-colors duration-200 hover:text-accent cursor-pointer"
-        aria-label="Narrative AI home"
-      >
-        <BookOpen className="h-5 w-5 text-accent" aria-hidden="true" />
-        Narrative AI
-      </Link>
+      <div className="flex min-w-0 items-center gap-3">
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-[family-name:var(--font-fraunces)] text-lg font-semibold text-foreground transition-colors duration-200 hover:text-accent cursor-pointer"
+          aria-label="Narrative AI home"
+        >
+          <BookOpen className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+          <span className="truncate">Narrative AI</span>
+        </Link>
+        <span
+          className="hidden rounded-md border border-border bg-surface px-2 py-0.5 text-xs text-muted sm:inline"
+          title="Application version"
+        >
+          v{APP_VERSION}
+        </span>
+      </div>
       <nav className="flex items-center gap-2">
         <Link
           href="/projects"

@@ -7,8 +7,8 @@ import { createEmptyNarrativeWork } from "@narrative-ai/graph-schema"
 
 const CANDIDATE_BASES = [
   process.env.E2E_BASE_URL,
-  "http://localhost:3000",
   "http://localhost:3001",
+  "http://localhost:3000",
   "http://localhost:3002",
 ].filter(Boolean)
 

@@ -2,9 +2,10 @@
 
 > Neuro-symbolic narrative intelligence platform for mapping story structure, character depth, stylistic coherence, and plot integrity.
 
-**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind · shadcn/ui · Graphology · React Flow · Cytoscape.js  
+**Stack:** Next.js 16 (App Router) · TypeScript · Tailwind · shadcn/ui · Graphology · React Flow · Cytoscape.js  
 **Character depth:** EgoQuest-adapted module (from [psyche-converse-1](https://github.com/Dinamush/psyche-converse))  
-**Status:** Greenfield — this document is the source of truth for implementation.
+**Version:** 0.1.0 (graph schema 1.1.0) — see [docs/VERSIONING.md](docs/VERSIONING.md) and [CHANGELOG.md](CHANGELOG.md)  
+**Status:** Early public release — MVP pipeline and UI are functional; cloud persistence and advanced coref are on the roadmap.
 
 ---
 
@@ -1178,21 +1179,26 @@ All LLM calls use **structured JSON output** validated against Zod schemas. Neve
 
 ### Environment variables
 
+Copy [`.env.example`](../.env.example) to `apps/web/.env.local`.
+
 ```env
-# LLM
+# LLM provider: ollama | openai | none (heuristic fallback)
+LLM_PROVIDER=ollama
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+OLLAMA_MODEL=llama3.2
+
+# OpenAI (optional)
 OPENAI_API_KEY=
-GOOGLE_GENERATIVE_AI_API_KEY=
-LLM_PROVIDER=openai
-LLM_MODEL=gpt-4o
+OPENAI_MODEL=gpt-4o-mini
 
-# Database (production)
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+# Debug
+LLM_DEBUG=1
 
-# Optional
-BOOKNLP_SERVICE_URL=    # Python sidecar for coreference
+# E2E (optional)
+E2E_BASE_URL=http://localhost:3001
 ```
+
+Production database variables (Supabase) are documented in [Section 11](#11-persistence--auth).
 
 ---
 

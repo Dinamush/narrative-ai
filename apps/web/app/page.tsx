@@ -33,6 +33,18 @@ export default function HomePage() {
                 View projects
               </Link>
             </div>
+            <p className="mt-6 text-center text-sm text-muted">
+              <a
+                href="https://github.com/Dinamush/narrative-ai"
+                className="underline-offset-2 hover:text-foreground hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open source on GitHub
+              </a>
+              {" · "}
+              MIT License
+            </p>
           </div>
 
           <div className="mt-20 grid gap-6 md:grid-cols-2 xl:grid-cols-4">

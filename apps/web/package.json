@@ -1,7 +1,14 @@
 {
   "name": "web",
   "version": "0.1.0",
+  "description": "Narrative AI web application",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dinamush/narrative-ai.git",
+    "directory": "apps/web"
+  },
   "scripts": {
     "predev": "npm run build --workspace=@narrative-ai/narrative-engine",
     "dev": "next dev --turbopack",

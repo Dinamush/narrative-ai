@@ -1,7 +1,14 @@
 {
   "name": "@narrative-ai/egoquest-fiction",
   "version": "0.1.0",
+  "description": "EgoQuest psychodynamic scoring adapted for fictional characters",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dinamush/narrative-ai.git",
+    "directory": "packages/egoquest-fiction"
+  },
   "type": "module",
   "exports": {
     ".": {

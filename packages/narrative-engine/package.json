@@ -1,7 +1,14 @@
 {
   "name": "@narrative-ai/narrative-engine",
   "version": "0.1.0",
+  "description": "Manuscript segmentation, fabula extraction, and character analysis pipeline",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dinamush/narrative-ai.git",
+    "directory": "packages/narrative-engine"
+  },
   "type": "module",
   "exports": {
     ".": {

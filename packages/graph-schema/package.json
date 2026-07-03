@@ -1,7 +1,14 @@
 {
   "name": "@narrative-ai/graph-schema",
   "version": "0.1.0",
+  "description": "Zod schemas and types for Narrative AI graph documents",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dinamush/narrative-ai.git",
+    "directory": "packages/graph-schema"
+  },
   "type": "module",
   "exports": {
     ".": {
