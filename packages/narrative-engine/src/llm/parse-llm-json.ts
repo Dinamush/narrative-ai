@@ -1,5 +1,12 @@
+export const stripReasoningBlocks = (raw: string): string =>
+  raw
+    .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/<think>[\s\S]*?<\/redacted_thinking>/gi, "")
+    .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, "")
+    .trim()
+
 export const parseLlmJson = <T>(raw: string): T => {
-  const trimmed = raw.trim()
+  const trimmed = stripReasoningBlocks(raw.trim())
 
   const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)```$/i)
   const body = fenced ? fenced[1].trim() : trimmed

@@ -1,4 +1,5 @@
 import type { LlmConfig } from "./llm-config.js"
+import { isReasoningModel } from "./llm-config.js"
 
 export type ChatMessage = {
   role: "system" | "user" | "assistant"
@@ -31,16 +32,24 @@ export const chatCompletionJson = async (
   const body: Record<string, unknown> = {
     model: config.model,
     messages,
-    temperature: options?.temperature ?? 0.2,
+    temperature: options?.temperature ?? config.temperature ?? 0.2,
     stream: false,
   }
 
   if (config.provider === "openai") {
     body.response_format = { type: "json_object" }
+    if (config.maxTokens) body.max_tokens = config.maxTokens
   }
 
   if (config.provider === "ollama") {
     body.format = "json"
+    const opts = {
+      num_predict: config.maxTokens ?? 4096,
+      ...(isReasoningModel(config.model)
+        ? { top_p: 0.95, repeat_penalty: 1.05 }
+        : {}),
+    }
+    body.options = opts
   }
 
   const response = await fetch(url, {
